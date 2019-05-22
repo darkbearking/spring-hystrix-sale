@@ -1,0 +1,26 @@
+server:
+  port: 9000
+spring:
+  application:
+    name: spring-hystrix-sale
+#打開feign與hystrix的關聯開關。開始少寫了個“d”.....
+feign:
+  hystrix:
+    enabled: true
+hystrix: 
+  command: 
+#下一行這種寫法是單獨針對HelloClientFallback類的toHello方法做的特殊配置，若你希望全局統配，可以參考下下一行的寫法
+#    HelloClientFallback#toHello():
+    default: 
+      execution:
+        isolation:
+          thread: 
+#超時時間
+            timeoutInMilliseconds: 500
+#10秒內有3個請求進來就滿足斷路器打開的第一個條件
+      circuitBreaker:
+        requestVolumeThreshold: 3
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/ #, http://localhost:8762/eureka/
